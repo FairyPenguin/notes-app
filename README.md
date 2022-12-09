@@ -16,7 +16,8 @@ Stack:
 
 To do:
 1- Done task behavior
-2- inprogress task behavior
+2- in-progress task behavior
+3- Add [Delete All] Button style& behavior
 
 DONE:
 
