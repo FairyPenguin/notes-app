@@ -15,8 +15,12 @@ Stack:
 4 Parcel [bundler]
 
 To do:
+1- Done task behavior
+2- inprogress task behavior
+
+DONE:
 
 1- Add the (Local storage) functionality:
 -add to localstorage
 -delete from localstorage
--retrive from localstorage 
+-retrive from localstorage

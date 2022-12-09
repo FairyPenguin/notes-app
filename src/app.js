@@ -72,9 +72,19 @@ noteContainer.addEventListener("click", (e) => {
     showAlertMessages("Your note deleted", "remove-message");
     currentNote.remove();
     const id = currentNote.querySelector("span").textContent;
-    // removeNote(Number(id));
+    removeNote(Number(id)); //--> remove note from Local Storage function
   }
 });
+
+function removeNote(id) {
+  //*this block of code is for guidance only
+  // for (let i = 0; i < notesArray.length; i++) {
+  //   console.log(`${notesArray[i].id}===${id}`);
+  // }
+  //! Code !
+  notesArray = notesArray.filter((NewNote) => NewNote.id != id);
+  addNoteToLocalStorage(notesArray);
+}
 
 function newNoteFunction() {
   if (titleInput.value.length > 0 && noteBodyInput.value.length > 0) {
@@ -94,7 +104,7 @@ function newNoteFunction() {
 
 //* Notes Array function !
 function addtoArray(NewNote) {
-    //! Array !//
+  //! Array !//
   notesArray.push(NewNote);
   addNewNoteToList(notesArray);
   addNoteToLocalStorage(notesArray);
@@ -132,7 +142,7 @@ form.addEventListener("submit", (e) => {
   newNoteFunction();
 });
 
-//! get from local storage
+//! add to local storage
 function addNoteToLocalStorage(notesArray) {
   window.localStorage.setItem("notes", JSON.stringify(notesArray));
 }
