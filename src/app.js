@@ -94,7 +94,7 @@ function newNoteFunction() {
 
 //* Notes Array function !
 function addtoArray(NewNote) {
-  //! Array !//
+    //! Array !//
   notesArray.push(NewNote);
   addNewNoteToList(notesArray);
   addNoteToLocalStorage(notesArray);
