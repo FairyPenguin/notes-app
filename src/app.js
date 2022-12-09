@@ -1,11 +1,20 @@
-// //* Global Query Selectors *//
+//* Global Query Selectors *//
 
 const noteContainer = document.querySelector(".note-container");
 const modalContainer = document.querySelector(".modal-container");
 const form = document.querySelector("form"); // Global Query Selectors
 const titleInput = document.querySelector("#title");
+const noteBodyInput = document.querySelector("#note");
+let notesArray = []; //! Arrrrrrrrray
 
-//* Class: for generating a new note *//
+if (localStorage.getItem("notes")) {
+  notesArray = JSON.parse(localStorage.getItem("notes"));
+}
+
+//! Trigger the getNotesFromLocalStorage function
+getNotesFromLocalStorage();
+
+//* Class: for generating a new note
 
 class Note {
   constructor(title, body) {
@@ -14,66 +23,12 @@ class Note {
     this.id = Math.random();
   }
 }
-
-// //* Local Storage functions *//
-
-// //* function: retrive notes from local storage
-
-// function getNotes() {
-//   let notes;
-//   if (localStorage.getItem("noteApp.notes") === null) {
-//     notes = [];
-//   } else {
-//     notes = JSON.parse(localStorage.getItem("noteApp.notes"));
-//   }
-//   return notes;
-// }
-
-// //* function: add a note to local storage
-
-// function addNotesToLocalStorage(note) {
-//   const notes = getNotes();
-//   notes.push(note);
-//   localStorage.setItem("noteApp.notes", JSON.stringify(notes));
-// }
-
-// //* function: remove a note from local storage
-
-// function removeNote(id) {
-//   const notes = getNotes();
-//   notes.forEach((note, index) => {
-//     if (note.id === id) {
-//       notes.splice(index, 1);
-//     }
-//     localStorage.setItem("noteApp.notes", JSON.stringify(notes));
-//   });
-// }
-//Function: create new note in the ui
-
-function addNewNoteToList(note) {
-  const newUINote = document.createElement("div");
-  newUINote.classList.add("note");
-  newUINote.innerHTML = `
-    <span hidden>${note.id}</span>
-    <h2 class="note-title">${note.title}</h2>
-    <p class="note-body">${note.body}</p>
-    <div class="note-btns">
-      <button class="note-btn view-btn">View Detail</button>
-      <button class="note-btn delete-btn">Delete Note</button>
-    </div>
-  `;
-
-  noteContainer.appendChild(newUINote);
-}
-
-// function: show notes in the ui //
-
-// function displayNotes() {
-//   const notes = getNotes();
-//   notes.forEach((note) => {
-//     addNewNoteToList(note);
-//   });
-// }
+/* 
+*we push the para to the array which 
+!is now coming from the ("form inputs validation")
+*as an argument, and reuse it agian in the array
+! now we have the problem of render the elements
+*/
 
 //* Function: Show alert messages *//
 
@@ -121,26 +76,73 @@ noteContainer.addEventListener("click", (e) => {
   }
 });
 
-// //* Event: Display notes eventlistner
-// document.addEventListener("DOMContentLoaded", displayNotes);
-
-//* Event: note form submit *//
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const titleInput = document.querySelector("#title");
-  const noteBodyInput = document.querySelector("#note");
-
-  //* form inputs validation *//
+function newNoteFunction() {
   if (titleInput.value.length > 0 && noteBodyInput.value.length > 0) {
-    const createNewNote = new Note(titleInput.value, noteBodyInput.value);
-    //Add new note to the ui//
-    addNewNoteToList(createNewNote);
-    // addNotesToLocalStorage(createNewNote);
+    const NewNote = new Note(titleInput.value, noteBodyInput.value);
+
+    addtoArray(NewNote);
+
     titleInput.value = "";
     noteBodyInput.value = "";
+    // addNewNoteToList(NewNote);
     showAlertMessages("Note Successfully added!", "success-message");
     titleInput.focus();
   } else {
     showAlertMessages("Please add both a title and a note", "alert-message");
   }
+}
+
+//* Notes Array function !
+function addtoArray(NewNote) {
+  //! Array !//
+  notesArray.push(NewNote);
+  addNewNoteToList(notesArray);
+  addNoteToLocalStorage(notesArray);
+  console.log(notesArray);
+  console.log(JSON.stringify(notesArray));
+  console.log(NewNote);
+}
+
+function addNewNoteToList() {
+  notesArray.forEach((note) => {
+    // note is the parameter used in
+    //  ${note.id}$, {note.title}$ and {note.body}
+
+    const newUINote = document.createElement("div");
+    newUINote.classList.add("note");
+    newUINote.innerHTML = `
+      <span hidden>${note.id}</span>
+      <h2 class="note-title">${note.title}</h2>
+      <p class="note-body">${note.body}</p>
+      <div class="note-btns">
+        <button class="note-btn view-btn">View Detail</button>
+        <button class="note-btn delete-btn">Delete Note</button>
+      </div>
+    `;
+
+    noteContainer.appendChild(newUINote);
+  });
+}
+
+//* form submit
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  //* form inputs newNoteFunction *//
+  newNoteFunction();
 });
+
+//! get from local storage
+function addNoteToLocalStorage(notesArray) {
+  window.localStorage.setItem("notes", JSON.stringify(notesArray));
+}
+
+//! get from local storage
+function getNotesFromLocalStorage() {
+  let localNotes = window.localStorage.getItem("notes");
+  if (localNotes) {
+    let notes = JSON.parse(localNotes);
+    console.log(notes);
+    addNewNoteToList();
+  }
+}
