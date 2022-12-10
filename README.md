@@ -12,6 +12,10 @@ Avialble functions:
 
 3- Display all the avilable notes
 
+4- View the note with a modal
+
+4- Save the notes in the localstorage
+
 Stack:
 1-HTML
 
